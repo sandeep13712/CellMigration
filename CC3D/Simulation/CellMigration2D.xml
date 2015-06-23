@@ -1,0 +1,164 @@
+<CompuCell3D Revision="20140610" Version="3.7.2">
+   
+   <Potts>
+      <!-- Basic properties of CPM (GGH) algorithm -->
+      <Dimensions x="500" y="500" z="1"/>
+      <Steps>5000</Steps>
+      <Temperature>0.01</Temperature>
+      <NeighborOrder>1</NeighborOrder>
+      <LatticeType>Square</LatticeType>
+   </Potts>
+   
+   <Plugin Name="CellType">
+      <!-- Listing all cell types in the simulation -->
+      <CellType TypeId="0" TypeName="Medium"/>
+      <CellType TypeId="1" TypeName="Epithelial"/>
+      <CellType TypeId="2" TypeName="Cancer"/>
+      <CellType TypeId="3" TypeName="Matrix" Freeze=""/>
+   </Plugin>      
+
+   <Plugin Name="Surface">
+   <SurfaceEnergyParameters CellType="Cancer" TargetSurface="35" LambdaSurface="0.5"/>
+   <SurfaceEnergyParameters CellType="Epithelial" TargetSurface="35" LambdaSurface="0.5"/>
+   </Plugin>
+   
+   <Plugin Name="Volume">
+   <VolumeEnergyParameters CellType="Cancer" TargetVolume="100" LambdaVolume="1.0"/>
+   <VolumeEnergyParameters CellType="Epithelial" TargetVolume="100" LambdaVolume="1.0"/>
+   </Plugin>    
+  
+   <Plugin Name="CenterOfMass"/>
+   <Plugin Name="PixelTracker"/>
+   
+    <Plugin Name="BoundaryPixelTracker">
+        <NeighborOrder>1</NeighborOrder>
+    </Plugin>
+
+ <Plugin Name="Contact">
+<!--       Specification of adhesion energies -->
+      <Energy Type1="Epithelial" Type2="Epithelial">40.0</Energy>
+      <Energy Type1="Medium" Type2="Epithelial">32.0</Energy>
+      <Energy Type1="Epithelial" Type2="Matrix">16.0</Energy>
+      <Energy Type1="Matrix" Type2="Matrix">5.0</Energy>
+      <Energy Type1="Medium" Type2="Matrix">35.0</Energy>
+      <Energy Type1="Medium" Type2="Medium">35.0</Energy> 
+      
+      
+      <Energy Type1="Cancer" Type2="Cancer">40.0</Energy>
+      <Energy Type1="Matrix" Type2="Cancer">16.0</Energy>
+      <Energy Type1="Medium" Type2="Cancer">16.0</Energy>
+      
+      <Energy Type1="Epithelial" Type2="Cancer">24.0</Energy>
+      
+   </Plugin>
+   
+<Plugin Name="ConnectivityGlobal">
+<Penalty Type="Epithelial">1000000</Penalty>
+<Penalty Type="Cancer">1000000</Penalty>
+</Plugin>
+<!-- PixelBased  -->
+<Plugin Name="ExternalPotential">
+<Algorithm>PixelBased</Algorithm>
+   </Plugin>
+   
+<Plugin Name="NeighborTracker"/>
+   
+   <Steppable Type="DiffusionSolverFE">
+      <DiffusionField Name="MMP">
+         <DiffusionData>
+            <FieldName>MMP</FieldName>
+            <GlobalDiffusionConstant>0.025</GlobalDiffusionConstant> 
+            <ExtraTimesPerMCS>36</ExtraTimesPerMCS>
+            <GlobalDecayConstant>0.002</GlobalDecayConstant>
+            <InitialConcentrationExpression>0</InitialConcentrationExpression>
+         </DiffusionData>
+         <SecretionData>
+            <!-- <Secretion Type="Cancer">0.00</Secretion> -->
+            <SecretionOnContact SecreteOnContactWith="Matrix" Type="Epithelial">0.05</SecretionOnContact> 
+            <!-- <ConstantConcentration Type="Cancer">0.1</ConstantConcentration> -->
+         </SecretionData>
+
+         <BoundaryConditions>
+            <Plane Axis="X">
+               <ConstantValue PlanePosition="Min" Value="0.0"/>
+               <ConstantValue PlanePosition="Max" Value="0.0"/>
+               <!-- Other options are (examples): -->
+               <!-- <Periodic/> -->
+               <!-- <ConstantDerivative PlanePosition="Min" Value="10.0"/> -->
+            </Plane>
+            
+            <Plane Axis="Y">:
+               <ConstantDerivative PlanePosition="Min" Value="0.0"/>
+               <ConstantDerivative PlanePosition="Max" Value="0.0"/>
+               <!-- Other options are (examples): -->
+               <!-- <Periodic/> -->
+               <!-- <ConstantValue PlanePosition="Min" Value="10.0"/> -->
+            </Plane>
+         </BoundaryConditions>
+      </DiffusionField>
+         </Steppable>
+         
+<Steppable Type="PIFInitializer">
+<PIFName>Lattice_1000Fibrers2.piff</PIFName> 
+</Steppable>
+
+<!-- <Steppable Type="UniformInitializer">       -->
+<!--         <Region> -->
+<!--          <BoxMin x="1" y="1" z="0"/> -->
+<!--          <BoxMax x="20" y="20" z="1"/> -->
+<!--          <Gap>0</Gap> -->
+<!--          <Width>10</Width> -->
+<!--          <Types>Epithelial</Types> -->
+<!--       </Region> -->
+<!-- </Steppable> -->
+
+<Steppable Type="BlobInitializer">
+<Region>
+<Gap>0</Gap>
+<Width>10</Width>
+<Radius>50</Radius>
+<Center x="250" y="250" z="0"/>
+<Types>Epithelial</Types>
+</Region>
+</Steppable>
+
+<!-- <Steppable Type="UniformInitializer">       -->
+<!--         <Region> -->
+<!--          <BoxMin x="240" y="240" z="0"/> -->
+<!--          <BoxMax x="270" y="270" z="1"/> -->
+<!--          <Gap>0</Gap> -->
+<!--          <Width>10</Width> -->
+<!--          <Types>Epithelial</Types> -->
+<!--       </Region> -->
+<!-- </Steppable> -->
+<!-- <Steppable Type="UniformInitializer"> -->
+
+<!--       <Region> -->
+<!--          <BoxMin x="20" y="100" z="0"/> -->
+<!--          <BoxMax x="180" y="110" z="1"/> -->
+<!--          <Gap>0</Gap> -->
+<!--          <Width>1</Width> -->
+<!--          <Types>Matrix</Types> -->
+<!--       </Region> -->
+
+
+
+<!--       <Region> -->
+<!--          <BoxMin x="235" y="235" z="0"/> -->
+<!--          <BoxMax x="255" y="255" z="1"/> -->
+<!--          <Gap>0</Gap> -->
+<!--          <Width>10</Width> -->
+<!--          <Types>Epithelial</Types> -->
+<!--       </Region> -->
+      
+<!--       <Region> -->
+<!--          <BoxMin x="20" y="50" z="0"/> -->
+<!--          <BoxMax x="180" y="60" z="1"/> -->
+<!--          <Gap>0</Gap> -->
+<!--          <Width>1</Width> -->
+<!--          <Types>Matrix</Types> -->
+<!--       </Region> -->
+      
+
+<!-- </Steppable> -->
+</CompuCell3D>

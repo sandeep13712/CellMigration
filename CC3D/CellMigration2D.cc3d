@@ -1,0 +1,5 @@
+<Simulation version="3.5.1">
+   <XMLScript Type="XMLScript">Simulation/CellMigration2D.xml</XMLScript>
+   <PythonScript Type="PythonScript">Simulation/CellMigration2D.py</PythonScript>
+   <Resource Type="Python">Simulation/CellMigration2DSteppables.py</Resource>
+</Simulation>
