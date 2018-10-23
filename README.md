@@ -1,5 +1,4 @@
 # CellMigration
-Proteolytic and non-proteolytic cell migration
 This repository contains CC3D code and utilities for studying 2D cell migration through collagen network. The initial verison of the code was generated for following publication:
 
 Proteolytic and non-proteolytic regulation of collective cell invasion: tuning by ECM density and organization
