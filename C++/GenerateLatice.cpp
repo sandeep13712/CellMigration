@@ -5,11 +5,27 @@
 
 #define PI 3.14159265358979
 
+
+/* Argument to generateMatrix
+Arg1, Arg2: Size of lattice (no of rows and no of colums)
+Arg3: No of fibers.
+Arg4, Arg5: Define the minimum and maximum length of the fiber
+Arg6: Fiber alignment. 
+------ If Arg6 is less than -10 then it generates radially aligned fibers. (Not used in my SciRep Paper)
+------ If Arg6 is between 0 and -10 then it generates randomly aligned fibers. 
+------ If Arg6 is greater than 0 it generates lenierly aligned fibers. 
+*/
+
 void generateMatrix(int, int, int, int, int, double);
 int generateLine(int, int, int, int, int, int*);
 
 int main()
 {
+	/*This code generates a fibrillar matrix with 
+	lattice dimentions of 500X500 pixels, 
+	600 fibers, 
+	each fiber has a length between 15 and 20 pixels, and 
+	all fibers are radially aligned */
 	generateMatrix(500,500,600,15,20,-10.0);
 }
 
@@ -70,7 +86,10 @@ void generateMatrix(int rows, int cols, int noOfFibers, int minLengthOfFiber, in
 			if(FiberPos[x][y] == 0)
 			{
 				FiberPos[x][y] = 1;
-				FILE *fp = fopen("Lattice_600Fibrers_Aligned.piff","a+");
+				/*FILE *fp = fopen("Lattice_600Fibrers_Aligned.piff","a+");*/
+				
+				/* change the filename to a suitable filename */
+				FILE *fp = fopen("filename.piff","a+");
 				fprintf(fp,"%d Matrix %d %d %d %d 0 0\n",cellID,x,x,y,y);
 				fclose(fp);
 				cellID++;
